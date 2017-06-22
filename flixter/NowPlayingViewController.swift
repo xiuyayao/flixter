@@ -12,6 +12,7 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
     
+    var movies: [[String: Any]] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,10 +41,17 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
                 // cast into Swift dictionary
                 // print(dataDictionary)
                 let movies = dataDictionary["results"] as! [[String: Any]]
+                // test print code
+                /*
                 for movie in movies {
                     let title = movie["title"] as! String
                     print(title)
                 }
+                */
+                self.movies = movies
+                // after network request comes back
+                // will load blank table view on phone screen if the line below not included
+                self.tableView.reloadData()
             }
         }
         task.resume()
@@ -52,11 +60,19 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return movies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath)
+        
+        // Hey go find thing with the identifier MovieCell and cast it as MovieCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
+        let movie = movies[indexPath.row]
+        let title = movie["title"] as! String
+        let overview = movie["overview"] as! String
+        cell.titleLabel.text = title
+        cell.overviewLabel.text = overview
+        
         return cell
     }
 
