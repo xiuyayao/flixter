@@ -13,12 +13,22 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
     
+    // activityIndicator outlet
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     var movies: [[String: Any]] = []
     var refreshControl: UIRefreshControl!
 
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        // activityIndicator code
+        tableView.backgroundView = activityIndicator
+        activityIndicator.startAnimating()
+        Thread.sleep(forTimeInterval: 3)
+        // WHY IS LINE BELOW UNNECESSARY?!
+        // activityIndicator.stopAnimating()
         
         refreshControl = UIRefreshControl()
         
@@ -99,6 +109,7 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         let cell = sender as! UITableViewCell
         if let indexPath = tableView.indexPath(for: cell) {
             let movie = movies[indexPath.row]
