@@ -23,11 +23,9 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
         
         super.viewDidLoad()
         
-        // activityIndicator code
         tableView.backgroundView = activityIndicator
         activityIndicator.startAnimating()
         Thread.sleep(forTimeInterval: 3)
-        // WHY IS LINE BELOW UNNECESSARY?!
         // activityIndicator.stopAnimating()
         
         refreshControl = UIRefreshControl()
