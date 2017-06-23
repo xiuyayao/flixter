@@ -12,30 +12,29 @@ class SuperheroViewController: UIViewController, UICollectionViewDataSource {
 
     @IBOutlet var collectionView: UICollectionView!
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     var movies: [[String: Any]] = []
+    var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
+        activityIndicator.startAnimating()
+        
         super.viewDidLoad()
         collectionView.dataSource = self
+        
+        refreshControl = UIRefreshControl()
+        
+        // If it had an event, who is it going to notify?
+        refreshControl.addTarget(self, action: #selector(NowPlayingViewController.didPullToRefresh(_:)), for: .valueChanged)
+        collectionView.insertSubview(refreshControl, at: 0)
         
         // Do any additional setup after loading the view.
         fetchMovies()
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PosterCell", for: indexPath) as! PosterCell
-        // indexPath.item because we're working with collectionView that likes to call its cells items
-        let movie = movies[indexPath.item]
-        if let posterPathString = movie["poster_path"] as? String {
-            let baseURLString = "https://image.tmdb.org/t/p/w500"
-            let posterURL = URL(string: baseURLString + posterPathString)!
-            cell.posterImageView.af_setImage(withURL: posterURL)
-        }
-        return cell
+    func didPullToRefresh(_ refreshControl: UIRefreshControl) {
+        fetchMovies()
     }
     
     func fetchMovies() {
@@ -72,10 +71,27 @@ class SuperheroViewController: UIViewController, UICollectionViewDataSource {
                 // after network request comes back
                 // will load blank table view on phone screen if the line below not included
                 self.collectionView.reloadData()
-                // self.refreshControl.endRefreshing()
+                self.refreshControl.endRefreshing()
             }
+            self.activityIndicator.stopAnimating()
         }
         task.resume()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return movies.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PosterCell", for: indexPath) as! PosterCell
+        // indexPath.item because we're working with collectionView that likes to call its cells items
+        let movie = movies[indexPath.item]
+        if let posterPathString = movie["poster_path"] as? String {
+            let baseURLString = "https://image.tmdb.org/t/p/w500"
+            let posterURL = URL(string: baseURLString + posterPathString)!
+            cell.posterImageView.af_setImage(withURL: posterURL)
+        }
+        return cell
     }
 
     override func didReceiveMemoryWarning() {

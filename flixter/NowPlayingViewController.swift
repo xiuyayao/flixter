@@ -45,12 +45,18 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
 
     override func viewDidLoad() {
         
-        super.viewDidLoad()
+        // start activityIndicator
+        activityIndicator.startAnimating()
         
+        super.viewDidLoad()
+        tableView.dataSource = self
+        
+        /*
         tableView.backgroundView = activityIndicator
         activityIndicator.startAnimating()
         Thread.sleep(forTimeInterval: 3)
         activityIndicator.stopAnimating()
+        */
         
         refreshControl = UIRefreshControl()
         
@@ -58,7 +64,6 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
         refreshControl.addTarget(self, action: #selector(NowPlayingViewController.didPullToRefresh(_:)), for: .valueChanged)
         tableView.insertSubview(refreshControl, at: 0)
         
-        tableView.dataSource = self
         fetchMovies()
         // Do any additional setup after loading the view.
     }
@@ -103,6 +108,8 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
                 self.tableView.reloadData()
                 self.refreshControl.endRefreshing()
             }
+            // stop activityIndicator
+            self.activityIndicator.stopAnimating()
         }
         task.resume()
     }
