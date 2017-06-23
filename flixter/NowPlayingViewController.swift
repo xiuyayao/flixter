@@ -10,6 +10,30 @@ import UIKit
 import AlamofireImage
 
 class NowPlayingViewController: UIViewController, UITableViewDataSource {
+    
+    
+    /*
+    let alertController = UIAlertController(title: "Title", message: "Message", preferredStyle: .alert)
+    
+    // create a cancel action
+    let cancelAction = UIAlertAction(title: "OK", style: .cancel) { (action) in
+        // handle cancel response here. Doing nothing will dismiss the view.
+    }
+    // add the cancel action to the alertController
+    alertController.addAction(cancelAction)
+    
+    // create an OK action
+    let OKAction = UIAlertAction(title: "OK", style: .default) { (action) in
+        // handle response here.
+    }
+    // add the OK action to the alert controller
+    alertController.addAction(OKAction)
+    
+    // PRESENT ALERT CONTROLLER
+    present(alertController, animated: true) {
+    // optional code for what happens after the alert controller has finished presenting
+    }
+    */
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -26,7 +50,7 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
         tableView.backgroundView = activityIndicator
         activityIndicator.startAnimating()
         Thread.sleep(forTimeInterval: 3)
-        // activityIndicator.stopAnimating()
+        activityIndicator.stopAnimating()
         
         refreshControl = UIRefreshControl()
         
