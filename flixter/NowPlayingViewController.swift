@@ -14,12 +14,28 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
     @IBOutlet weak var tableView: UITableView!
     
     var movies: [[String: Any]] = []
+    var refreshControl: UIRefreshControl!
 
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
-        tableView.dataSource = self
+        refreshControl = UIRefreshControl()
         
+        // If it had an event, who is it going to notify?
+        refreshControl.addTarget(self, action: #selector(NowPlayingViewController.didPullToRefresh(_:)), for: .valueChanged)
+        tableView.insertSubview(refreshControl, at: 0)
+        
+        tableView.dataSource = self
+        fetchMovies()
+        // Do any additional setup after loading the view.
+    }
+    
+    func didPullToRefresh(_ refreshControl: UIRefreshControl) {
+        fetchMovies()
+    }
+    
+    func fetchMovies() {
         let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=b0dc2f9b663ecf33aed9b648055a6c7f")!
         // Above statement returns an optional url, so bang (!) added at end to force unwrapping
         
@@ -44,20 +60,19 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
                 let movies = dataDictionary["results"] as! [[String: Any]]
                 // test print code
                 /*
-                for movie in movies {
-                    let title = movie["title"] as! String
-                    print(title)
-                }
-                */
+                 for movie in movies {
+                 let title = movie["title"] as! String
+                 print(title)
+                 }
+                 */
                 self.movies = movies
                 // after network request comes back
                 // will load blank table view on phone screen if the line below not included
                 self.tableView.reloadData()
+                self.refreshControl.endRefreshing()
             }
         }
         task.resume()
-        
-        // Do any additional setup after loading the view.
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -81,6 +96,15 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
         cell.powerImageView.af_setImage(withURL: posterURL)
         
         return cell
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let cell = sender as! UITableViewCell
+        if let indexPath = tableView.indexPath(for: cell) {
+            let movie = movies[indexPath.row]
+            let detailViewController = segue.destination as! DetailViewController
+            detailViewController.movie = movie
+        }
     }
 
     override func didReceiveMemoryWarning() {
