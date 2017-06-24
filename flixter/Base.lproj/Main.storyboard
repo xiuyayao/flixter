@@ -25,9 +25,14 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <searchBar key="tableHeaderView" contentMode="redraw" id="EEf-uw-d1k">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                </searchBar>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MovieCell" rowHeight="214" id="seJ-1q-IW6" customClass="MovieCell" customModule="flixter" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="214"/>
+                                        <rect key="frame" x="0.0" y="72" width="375" height="214"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="seJ-1q-IW6" id="RRI-9x-15D">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="213.5"/>
@@ -73,6 +78,7 @@
                     <navigationItem key="navigationItem" title="Movies" id="WEw-7v-h3p"/>
                     <connections>
                         <outlet property="activityIndicator" destination="bnV-EQ-264" id="wAh-mB-Has"/>
+                        <outlet property="searchBar" destination="EEf-uw-d1k" id="zM6-Mf-NT8"/>
                         <outlet property="tableView" destination="7JQ-mC-xgS" id="dVH-Yi-8b7"/>
                     </connections>
                 </viewController>
@@ -188,7 +194,7 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <activityIndicatorView key="backgroundView" hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" id="nGf-ot-xJu">
-                            <rect key="frame" x="169" y="251" width="37" height="37"/>
+                            <rect key="frame" x="0.0" y="-64" width="375" height="667"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="color" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         </activityIndicatorView>
@@ -221,7 +227,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="is5-1K-sYR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1040.8" y="903.59820089955031"/>
+            <point key="canvasLocation" x="1041" y="904"/>
         </scene>
         <!--Superhero-->
         <scene sceneID="8Qt-98-g8P">
@@ -248,6 +254,6 @@
         <image name="superhero_tabbar_item" width="21" height="23"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="iCf-S4-397"/>
+        <segue reference="02x-Wx-rQs"/>
     </inferredMetricsTieBreakers>
 </document>

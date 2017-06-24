@@ -9,38 +9,19 @@
 import UIKit
 import AlamofireImage
 
-class NowPlayingViewController: UIViewController, UITableViewDataSource {
+class NowPlayingViewController: UIViewController, UITableViewDataSource, UISearchBarDelegate {
     
+    var alertController: UIAlertController!
     
-    /*
-    let alertController = UIAlertController(title: "Title", message: "Message", preferredStyle: .alert)
-    
-    // create a cancel action
-    let cancelAction = UIAlertAction(title: "OK", style: .cancel) { (action) in
-        // handle cancel response here. Doing nothing will dismiss the view.
-    }
-    // add the cancel action to the alertController
-    alertController.addAction(cancelAction)
-    
-    // create an OK action
-    let OKAction = UIAlertAction(title: "OK", style: .default) { (action) in
-        // handle response here.
-    }
-    // add the OK action to the alert controller
-    alertController.addAction(OKAction)
-    
-    // PRESENT ALERT CONTROLLER
-    present(alertController, animated: true) {
-    // optional code for what happens after the alert controller has finished presenting
-    }
-    */
-
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
     // activityIndicator outlet
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var movies: [[String: Any]] = []
+    var moviesCopy: [[String: Any]] = []
+    
     var refreshControl: UIRefreshControl!
 
     override func viewDidLoad() {
@@ -50,6 +31,18 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
         
         super.viewDidLoad()
         tableView.dataSource = self
+        searchBar.delegate = self
+        
+        
+        alertController = UIAlertController(title: "Cannot get movies", message: "Offline", preferredStyle: .alert)
+        
+        // create a try again action
+        let tryAgainAction = UIAlertAction(title: "Try Again", style: .cancel) { (action) in
+            // handle cancel response here. Doing nothing will dismiss the view
+            self.fetchMovies()
+        }
+        // add the cancel action to the alertController
+        alertController.addAction(tryAgainAction)
         
         /*
         tableView.backgroundView = activityIndicator
@@ -86,6 +79,9 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
         let task = session.dataTask(with: request) { (data, response, error) in
             // This code below will run with network request returns
             if let error = error {
+                self.present(self.alertController, animated: true) {
+                    // optional code for what happens after the alert controller has finished presenting
+                }
                 print(error.localizedDescription)
             } else if let data = data {
                 // got JSON data back and now parse it
@@ -105,6 +101,7 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
                 self.movies = movies
                 // after network request comes back
                 // will load blank table view on phone screen if the line below not included
+                self.moviesCopy = movies
                 self.tableView.reloadData()
                 self.refreshControl.endRefreshing()
             }
@@ -112,6 +109,21 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
             self.activityIndicator.stopAnimating()
         }
         task.resume()
+    }
+    
+    // This method updates filteredData based on the text in the Search Box
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        // When there is no text, filteredData is the same as the original data
+        // When user has entered text into the search box
+        // Use the filter method to iterate over all items in the data array
+        // For each item, return true if the item should be included and false if the
+        // item should NOT be included
+        movies = searchText.isEmpty ? moviesCopy : moviesCopy.filter { (movie: [String: Any]) -> Bool in
+            
+            return (movie["title"] as! String).range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
+        }
+        
+        tableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
