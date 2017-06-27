@@ -33,6 +33,9 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource, UISearc
         tableView.dataSource = self
         searchBar.delegate = self
         
+        // Set rowHeight and estimatedRowHeight
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 50
         
         alertController = UIAlertController(title: "Cannot get movies", message: "Offline", preferredStyle: .alert)
         
