@@ -31,8 +31,8 @@ The following **additional** features are implemented:
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1.
-2.
+1. How to add a search bar into collection view (I tried dragging a search bar onto the SuperheroViewController, but it would not stick to the view controller)
+2. Exactly what an API is and more about how it works
 
 ## Video Walkthrough
 
@@ -45,6 +45,8 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 ## Notes
 
 Describe any challenges encountered while building the app.
+
+Challenges included running into numerous compiling errors. These were caused mainly by incorrect outlet connections and cast attempts.
 
 ## Credits
 
